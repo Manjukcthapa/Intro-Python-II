@@ -2,12 +2,15 @@ import sys
 
 from room import Room
 from player import Player
+from item import Item
+
 
 # Declare all the rooms
 
 room = {
     'outside':  Room("Outside Cave Entrance",
                      "North of you, the cave mount beckons"),
+
 
     'foyer':    Room("Foyer", """Dim light filters in from the south. Dusty
 passages run north and east."""),
@@ -21,7 +24,7 @@ to north. The smell of gold permeates the air."""),
 
     'treasure': Room("Treasure Chamber", """You've found the long-lost treasure
 chamber! Sadly, it has already been completely emptied by
-earlier adventurers. The only exit is to the south."""),
+earlier adventurers. The only exit is to the south., """),
 }
 
 
@@ -37,14 +40,19 @@ room['treasure'].s_to = room['narrow']
 
 player = Player(room['outside'])
 
+
 # Functions
 def move():
     # Get user input
     user_input = input("Which direction? (N, E, S, W):  ")
-    user_input = user_input.lower()
+    user_input = user_input.lower()  
+
+    #One or tow move
+    user_move_list = user_input.split()
+    if len(user_move_list) == 1:
 
     # Check if move is a valid direction
-    valid_dirs = ["n", "e", "s", "w", "q"]
+     valid_dirs = ["n", "e", "s", "w", "q", "i"]
     if user_input not in valid_dirs:
         print("Sorry, that's not a valid direction. Please enter: 'N', 'E', 'S' or 'W'")
         move()
@@ -52,8 +60,10 @@ def move():
         # Quit if "q"
         if user_input=="q":
             print("Bye!")
-            sys.exit(0)
-        
+            sys.exit(0)       
+
+     
+
         global player
         # Check if there's a room in each direction
 
