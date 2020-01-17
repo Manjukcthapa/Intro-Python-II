@@ -9,7 +9,7 @@ from item import Item
 
 room = {
     'outside':  Room("Outside Cave Entrance",
-                     "North of you, the cave mount beckons"),
+                     "North of you, the cave mount beckons items=[Item('Rock', 'Heavy, and durable')]"),
 
 
     'foyer':    Room("Foyer", """Dim light filters in from the south. Dusty
@@ -24,7 +24,7 @@ to north. The smell of gold permeates the air."""),
 
     'treasure': Room("Treasure Chamber", """You've found the long-lost treasure
 chamber! Sadly, it has already been completely emptied by
-earlier adventurers. The only exit is to the south., """),
+earlier adventurers. The only exit is to the south.,items=[Item('Treasure', 'Super valuable')]"""),
 }
 
 
@@ -40,82 +40,84 @@ room['treasure'].s_to = room['narrow']
 
 player = Player(room['outside'])
 
-
 # Functions
 def move():
     # Get user input
-    user_input = input("Which direction? (N, E, S, W):  ")
-    user_input = user_input.lower()  
+    user_move = input("Which direction? (N, E, S, W):  ")
+    user_move = user_move.lower()
 
-    #One or tow move
-    user_move_list = user_input.split()
-    if len(user_move_list) == 1:
+    # One or Two word move?
+    user_move_list = user_move.split()
+    if len(user_move_list) ==1:
 
-    # Check if move is a valid direction
-     valid_dirs = ["n", "e", "s", "w", "q", "i"]
-    if user_input not in valid_dirs:
-        print("Sorry, that's not a valid direction. Please enter: 'N', 'E', 'S' or 'W'")
-        move()
-    else:
-        # Quit if "q"
-        if user_input=="q":
-            print("Bye!")
-            sys.exit(0)       
-
-     
-
-        global player
-        # Check if there's a room in each direction
-
-        # North
-        try:
-            if user_input=="n":
-                if player.room.n_to == "nothing":
-                    print("Sorry, there's nothing there.")
-                    move()
-                else:
-                    new_location = player.room.n_to
-                    player = Player(new_location)
-                    print(player.room)
-                    move()
-
-            # South
-            if user_input=="s":
-                if player.room.s_to == "nothing":
-                    print("Sorry, there's nothing there.")
-                    move()
-                else:
-                    new_location = player.room.s_to
-                    player = Player(new_location)
-                    print(player.room)
-                    move()
-
-            # East
-            if user_input=="e":
-                if player.room.e_to == "nothing":
-                    print("Sorry, there's nothing there.")
-                    move()
-                else:
-                    new_location = player.room.e_to
-                    player = Player(new_location)
-                    print(player.room)
-                    move()
-
-            # West
-            if user_input=="w":
-                if player.room.w_to == "nothing":
-                    print("Sorry, there's nothing there.")
-                    move()
-                else:
-                    new_location = player.room.w_to
-                    player = Player(new_location)
-                    print(player.room)
-                    move()
-        except AttributeError:
-            print("Sorry, there's nothing there.")
+        # Check if move is a valid direction
+        valid_dirs = ["n", "e", "s", "w", "q", "i", "inventory"]
+        if user_move not in valid_dirs:
+            print("Sorry, that's not a valid direction. Please enter: 'N', 'E', 'S' or 'W'")
             move()
+        else:
+            global player
+            # Simple commands
+            if user_move=="q":
+                print("Bye!")
+                sys.exit(0)
 
+            elif user_move in ["i", "inventory"]:
+                inventory = [entry.name for entry in player.inventory]
+                print(f"Current Inventory: {inventory}")
+                move()
+            
+            # Check if there's a room in each direction
+
+            # North
+            try:
+                if user_move=="n":
+                    if player.room.n_to == "nothing":
+                        print("Sorry, there's nothing there.")
+                        move()
+                    else:
+                        new_location = player.room.n_to
+                        player = Player(new_location)
+                        print(player.room)
+                        move()
+
+                # South
+                if user_move=="s":
+                    if player.room.s_to == "nothing":
+                        print("Sorry, there's nothing there.")
+                        move()
+                    else:
+                        new_location = player.room.s_to
+                        player = Player(new_location)
+                        print(player.room)
+                        move()
+
+                # East
+                if user_move=="e":
+                    if player.room.e_to == "nothing":
+                        print("Sorry, there's nothing there.")
+                        move()
+                    else:
+                        new_location = player.room.e_to
+                        player = Player(new_location)
+                        print(player.room)
+                        move()
+
+                # West
+                if user_move=="w":
+                    if player.room.w_to == "nothing":
+                        print("Sorry, there's nothing there.")
+                        move()
+                    else:
+                        new_location = player.room.w_to
+                        player = Player(new_location)
+                        print(player.room)
+                        move()
+            except AttributeError:
+                print("Sorry, there's nothing there.")
+                move()
     
+     
 
 #
 # Main
